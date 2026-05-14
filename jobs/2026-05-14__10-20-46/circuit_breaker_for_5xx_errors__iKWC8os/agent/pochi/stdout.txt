@@ -1,0 +1,59 @@
+- Initializing MCP connections...
+You
+# Circuit Breaker Policy ## Background Zuplo allows developers to write custom policies to implement advanced gateway logic. In this task, you will implement a Circuit Breaker pattern using custom inbound and outbound policies, and `ZoneCache` to track state. ## Requirements - You have a Zuplo project initialized at `/home/user/zuplo-project`. - Create a custom inbound policy module `modules/circuit-breaker-inbound.ts` and a custom outbound policy module `modules/circuit-breaker-outbound.ts`. - The circuit breaker must trip after 5 consecutive 5xx errors from the backend. - When tripped, the inbound policy must return a `503 Service Unavailable` response with the body `{"error": "Circuit breaker tripped"}` and must not forward the request to the backend. - The circuit breaker should reset (allow requests again) after 60 seconds of being tripped. - If a request succeeds (status < 500), the consecutive error count must be reset to 0. - Configure a route `/api/status/{code}` that proxies to `https://httpbin.org/status/${params.code}` using the `urlRewriteHandler`. - Apply both the inbound and outbound circuit breaker policies to this route. ## Implementation Guide 1. In `modules/circuit-breaker-inbound.ts`, use `ZoneCache` with a key like `"cb-state"`. Read the state. If `tripped` is true, return a 503 response. 2. In `modules/circuit-breaker-outbound.ts`, check `response.status`. - If >= 500, increment the error count in the cache. If it reaches 5, set `tripped: true` with a TTL of 60 seconds in the cache, and reset the count. - If < 500, reset the error count to 0 in the cache. 3. Update `config/policies.json` to register `circuit-breaker-inbound` and `circuit-breaker-outbound`. 4. Update `config/routes.oas.json` to define `/api/status/{code}` with the `urlRewriteHandler` pointing to `https://httpbin.org/status/${params.code}` and applying both policies. ## Constraints - Project path: `/home/user/zuplo-project` - Start command: `npm run dev &` - Port: 8787 ## Integrations - None   
+
+Pochi
+💭 Thinking for 280 characters   
+📂 Listing files in /home/user/zuplo-project recursively ✔ 
+💭 Thinking for 717 characters   
+📂 Listing files in /home/user/zuplo-project/modules ✔ 
+📖 Reading /home/user/zuplo-project/package.json ✔ 
+💭 Thinking for 211 characters   
+📋 Updating todo list (5 items) ✔ 
+💭 Thinking for 228 characters   
+✏️  Writing /home/user/zuplo-project/modules/circuit-breaker-inbound.ts ✔ 
+💭 Thinking for 772 characters   
+📋 Updating todo list (5 items) ✔ 
+✏️  Writing /home/user/zuplo-project/modules/circuit-breaker-outbound.ts ✔ 
+📖 Reading /home/user/zuplo-project/config/policies.json ✔ 
+💭 Thinking for 221 characters   
+📋 Updating todo list (5 items) ✔ 
+✏️  Writing /home/user/zuplo-project/config/policies.json ✔ 
+📖 Reading /home/user/zuplo-project/config/routes.oas.json ✔ 
+💭 Thinking for 215 characters   
+📋 Updating todo list (5 items) ✔ 
+✏️  Writing /home/user/zuplo-project/config/routes.oas.json ✔ 
+📋 Updating todo list (5 items) ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 241 characters   
+🔧 Applying diff to /home/user/zuplo-project/config/policies.json ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 284 characters   
+🔧 Applying diff to /home/user/zuplo-project/config/routes.oas.json ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 249 characters   
+📖 Reading /home/user/zuplo-project/zuplo.jsonc ✔ 
+💭 Thinking for 666 characters   
+🛠️ Tool killBackgroundJob ✔ 
+📋 Updating todo list (5 items) ✔ 
+💭 Thinking for 994 characters   
+🎉 Task Completed
+I have implemented the Circuit Breaker pattern in the Zuplo project. 
+
+### Changes made:
+1.  **Inbound Policy**: Created `modules/circuit-breaker-inbound.ts` which checks the `cb-tripped` key in `ZoneCache`. If present, it returns a `503 Service Unavailable` response with the body `{"error": "Circuit breaker tripped"}`.
+2.  **Outbound Policy**: Created `modules/circuit-breaker-outbound.ts` which monitors the backend response status.
+    -   If the status is `>= 500`, it increments a counter in the cache.
+    -   If the counter reaches 5, it sets the `cb-tripped` key with a TTL of 60 seconds.
+    -   If the status is `< 500`, it resets the counter.
+3.  **Policy Registration**: Updated `config/policies.json` to register both policies using the `custom-code-inbound` and `custom-code-outbound` types.
+4.  **Route Configuration**: Updated `config/routes.oas.json` to define the `/api/status/{code}` route, using the `urlRewriteHandler` to proxy to `https://httpbin.org/status/${params.code}` and applying the circuit breaker policies.
+
+The configuration was verified by starting the Zuplo development server, which successfully initialized with the new policies and route.   
+- Waiting for async work to complete (timeout: 60000ms)...
+✖ Async wait timeout reached. Remaining: 0 subtask(s), 1 job(s)
+  

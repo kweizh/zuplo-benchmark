@@ -1,0 +1,30 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1778726175.8424032,
+            "stop": 1778726235.9131765
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_circuit_breaker_behavior",
+                "status": "failed",
+                "duration": 60.03704487718642,
+                "start": 1778726175.856694,
+                "stop": 1778726235.9128754,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def start_app():\n        # Start the app\n        process = subprocess.Popen(\n            [\"npm\", \"run\", \"dev\"],\n            cwd=PROJECT_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Wait for the app to be ready\n        if not wait_for_port(PORT):\n            import signal\n            os.killpg(os.getpgid(process.pid), signal.SIGTERM)\n>           pytest.fail(f\"App failed to start and listen on port {PORT}.\")\nE           Failed: App failed to start and listen on port 8787.\n\ntests/test_final_state.py:36: Failed"
+            }
+        ]
+    }
+}

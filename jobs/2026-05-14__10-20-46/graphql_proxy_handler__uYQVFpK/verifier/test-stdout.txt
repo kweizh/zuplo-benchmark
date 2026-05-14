@@ -1,0 +1,67 @@
+downloading uv 0.9.7 x86_64-unknown-linux-gnu
+no checksums to verify
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 79ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 3 items
+
+tests/test_final_state.py .FF                                            [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_routes_oas_json_exists __________________________
+
+    def test_routes_oas_json_exists():
+        routes_path = os.path.join(PROJECT_DIR, "config", "routes.oas.json")
+        assert os.path.isfile(routes_path), f"Routes config file {routes_path} does not exist."
+    
+        with open(routes_path) as f:
+            routes = json.load(f)
+    
+        paths = routes.get("paths", {})
+        assert "/graphql" in paths, "Expected '/graphql' route in routes.oas.json"
+    
+        graphql_route = paths["/graphql"]
+        assert "post" in graphql_route or "POST" in graphql_route, "Expected POST method for '/graphql' route"
+    
+        post_route = graphql_route.get("post", graphql_route.get("POST"))
+        zuplo_route = post_route.get("x-zuplo-route", {})
+    
+        handler = zuplo_route.get("handler", {})
+>       assert handler, "Expected handler configuration for '/graphql' route"
+E       AssertionError: Expected handler configuration for '/graphql' route
+E       assert {}
+
+tests/test_final_state.py:27: AssertionError
+__________________________ test_policies_json_exists ___________________________
+
+    def test_policies_json_exists():
+        policies_path = os.path.join(PROJECT_DIR, "config", "policies.json")
+        assert os.path.isfile(policies_path), f"Policies config file {policies_path} does not exist."
+    
+        with open(policies_path) as f:
+            policies_config = json.load(f)
+    
+>       policies = policies_config.get("policies", [])
+                   ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'list' object has no attribute 'get'
+
+tests/test_final_state.py:46: AttributeError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_project_dir_exists
+FAILED tests/test_final_state.py::test_routes_oas_json_exists - AssertionErro...
+FAILED tests/test_final_state.py::test_policies_json_exists - AttributeError:...
+========================= 2 failed, 1 passed in 0.35s ==========================

@@ -1,0 +1,41 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1778726407.7587306,
+            "stop": 1778726407.7927437
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_cors_policy_in_policies_json",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0008368999697268009,
+                "start": 1778726407.774307,
+                "stop": 1778726407.791559,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_cors_policy_in_policies_json():\n        policies_path = os.path.join(PROJECT_DIR, \"config\", \"policies.json\")\n        assert os.path.isfile(policies_path), f\"Config file {policies_path} does not exist.\"\n    \n        with open(policies_path) as f:\n            try:\n                data = json.load(f)\n            except json.JSONDecodeError:\n                pytest.fail(f\"{policies_path} is not valid JSON.\")\n    \n        assert \"corsPolicies\" in data, \"No 'corsPolicies' array found in policies.json.\"\n        cors_policies = data[\"corsPolicies\"]\n        assert isinstance(cors_policies, list), \"'corsPolicies' must be an array.\"\n    \n        my_policy = next((p for p in cors_policies if p.get(\"name\") == \"my-cors-policy\"), None)\n        assert my_policy is not None, \"CORS policy 'my-cors-policy' not found in corsPolicies.\"\n    \n        # Verify allowedOrigins\n        allowed_origins = my_policy.get(\"allowedOrigins\", [])\n        if isinstance(allowed_origins, str):\n            allowed_origins = [o.strip() for o in allowed_origins.split(\",\")]\n>       assert \"https://app.example.com\" in allowed_origins, \"'https://app.example.com' missing from allowedOrigins.\"\nE       AssertionError: 'https://app.example.com' missing from allowedOrigins.\nE       assert 'https://app.example.com' in []\n\ntests/test_final_state.py:28: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_cors_policy_applied_to_route",
+                "status": "passed",
+                "duration": 0.0005773184821009636,
+                "start": 1778726407.7918246,
+                "stop": 1778726407.7925627,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

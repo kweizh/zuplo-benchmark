@@ -1,0 +1,142 @@
+downloading uv 0.9.7 x86_64-unknown-linux-gnu
+no checksums to verify
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 88ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 4 items
+
+tests/test_final_state.py .FFF                                           [100%]
+
+=================================== FAILURES ===================================
+___________________________ test_policies_json_valid ___________________________
+
+    def test_policies_json_valid():
+        policies_path = os.path.join(CONFIG_DIR, "policies.json")
+        assert os.path.isfile(policies_path), f"{policies_path} does not exist."
+    
+        with open(policies_path) as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                pytest.fail("policies.json is not valid JSON.")
+    
+>       policies = data.get("policies", [])
+                   ^^^^^^^^
+E       AttributeError: 'list' object has no attribute 'get'
+
+tests/test_final_state.py:33: AttributeError
+__________________________ test_routes_oas_json_valid __________________________
+
+    def test_routes_oas_json_valid():
+        routes_path = os.path.join(CONFIG_DIR, "routes.oas.json")
+        assert os.path.isfile(routes_path), f"{routes_path} does not exist."
+    
+        with open(routes_path) as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                pytest.fail("routes.oas.json is not valid JSON.")
+    
+        paths = data.get("paths", {})
+        assert "/api/data" in paths, "Route /api/data is missing."
+    
+        get_method = paths["/api/data"].get("get", {})
+        zuplo_route = get_method.get("x-zuplo-route", {})
+    
+        handler = zuplo_route.get("handler", {})
+>       assert handler.get("name") == "url-rewrite" or "url-rewrite" in handler.get("module", ""), "Handler is not url-rewrite."
+E       AssertionError: Handler is not url-rewrite.
+E       assert (None == 'url-rewrite' or 'url-rewrite' in '$import(@zuplo/runtime)')
+E        +  where None = <built-in method get of dict object at 0x7433183c6940>('name')
+E        +    where <built-in method get of dict object at 0x7433183c6940> = {'export': 'UrlRewriteHandler', 'module': '$import(@zuplo/runtime)', 'options': {'rewrite': '${context.custom.downstreamUrl}/data'}}.get
+E        +  and   '$import(@zuplo/runtime)' = <built-in method get of dict object at 0x7433183c6940>('module', '')
+E        +    where <built-in method get of dict object at 0x7433183c6940> = {'export': 'UrlRewriteHandler', 'module': '$import(@zuplo/runtime)', 'options': {'rewrite': '${context.custom.downstreamUrl}/data'}}.get
+
+tests/test_final_state.py:60: AssertionError
+_________________________ test_simulated_routing_logic _________________________
+
+    def test_simulated_routing_logic():
+        # We will write a small Node.js script that uses typescript to load the module and test it
+        test_script_path = os.path.join(PROJECT_DIR, "test_runner.js")
+        routing_path = os.path.join(MODULES_DIR, "routing.ts")
+    
+        script_content = f"""
+        const fs = require('fs');
+        const path = require('path');
+        const {{execSync}} = require('child_process');
+    
+        try {{
+            // We compile the TS file to JS to test it without tsx
+            execSync('npx -y typescript tsc {routing_path} --target es2022 --module commonjs --esModuleInterop');
+            const jsPath = '{routing_path}'.replace('.ts', '.js');
+            const handler = require(jsPath).default || require(jsPath);
+    
+            async function runTest() {{
+                // Test 1: Sandbox
+                let context1 = {{ custom: {{}} }};
+                let req1 = {{ user: {{ data: {{ environment: 'sandbox' }} }} }};
+                await handler(req1, context1);
+                if (context1.custom.downstreamUrl !== 'https://sandbox.example.com') throw new Error('Sandbox failed');
+    
+                // Test 2: Production
+                let context2 = {{ custom: {{}} }};
+                let req2 = {{ user: {{ data: {{ environment: 'production' }} }} }};
+                await handler(req2, context2);
+                if (context2.custom.downstreamUrl !== 'https://api.example.com') throw new Error('Production failed');
+    
+                // Test 3: Invalid
+                let context3 = {{ custom: {{}} }};
+                let req3 = {{ user: {{ data: {{ environment: 'invalid' }} }} }};
+                let res3 = await handler(req3, context3);
+                if (!res3 || res3.status !== 400) throw new Error('Invalid environment did not return 400');
+    
+                console.log('SUCCESS');
+            }}
+    
+            runTest().catch(e => {{ console.error(e.message); process.exit(1); }});
+        }} catch (e) {{
+            console.error("Compilation or execution failed: " + e.message);
+            process.exit(1);
+        }}
+        """
+    
+        with open(test_script_path, "w") as f:
+            f.write(script_content)
+    
+        result = subprocess.run(
+            ["node", test_script_path],
+            capture_output=True, text=True, cwd=PROJECT_DIR
+        )
+    
+>       assert "SUCCESS" in result.stdout, f"Simulated test failed: {result.stderr} {result.stdout}"
+E       AssertionError: Simulated test failed: npm error could not determine executable to run
+E         npm error A complete log of this run can be found in: /root/.npm/_logs/2026-05-14T02_24_24_023Z-debug-0.log
+E         Compilation or execution failed: Command failed: npx -y typescript tsc /home/user/myproject/modules/routing.ts --target es2022 --module commonjs --esModuleInterop
+E         npm error could not determine executable to run
+E         npm error A complete log of this run can be found in: /root/.npm/_logs/2026-05-14T02_24_24_023Z-debug-0.log
+E         
+E          
+E       assert 'SUCCESS' in ''
+E        +  where '' = CompletedProcess(args=['node', '/home/user/myproject/test_runner.js'], returncode=1, stdout='', stderr='npm error coul... run\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2026-05-14T02_24_24_023Z-debug-0.log\n\n').stdout
+
+tests/test_final_state.py:119: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_routing_ts_exists
+FAILED tests/test_final_state.py::test_policies_json_valid - AttributeError: ...
+FAILED tests/test_final_state.py::test_routes_oas_json_valid - AssertionError...
+FAILED tests/test_final_state.py::test_simulated_routing_logic - AssertionErr...
+========================= 3 failed, 1 passed in 2.58s ==========================

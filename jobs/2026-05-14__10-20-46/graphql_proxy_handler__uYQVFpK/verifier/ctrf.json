@@ -1,0 +1,53 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 1,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1778726911.514371,
+            "stop": 1778726911.864684
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_project_dir_exists",
+                "status": "passed",
+                "duration": 0.001352186780422926,
+                "start": 1778726911.8355756,
+                "stop": 1778726911.8374076,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_routes_oas_json_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0012289518490433693,
+                "start": 1778726911.8378751,
+                "stop": 1778726911.860258,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_routes_oas_json_exists():\n        routes_path = os.path.join(PROJECT_DIR, \"config\", \"routes.oas.json\")\n        assert os.path.isfile(routes_path), f\"Routes config file {routes_path} does not exist.\"\n    \n        with open(routes_path) as f:\n            routes = json.load(f)\n    \n        paths = routes.get(\"paths\", {})\n        assert \"/graphql\" in paths, \"Expected '/graphql' route in routes.oas.json\"\n    \n        graphql_route = paths[\"/graphql\"]\n        assert \"post\" in graphql_route or \"POST\" in graphql_route, \"Expected POST method for '/graphql' route\"\n    \n        post_route = graphql_route.get(\"post\", graphql_route.get(\"POST\"))\n        zuplo_route = post_route.get(\"x-zuplo-route\", {})\n    \n        handler = zuplo_route.get(\"handler\", {})\n>       assert handler, \"Expected handler configuration for '/graphql' route\"\nE       AssertionError: Expected handler configuration for '/graphql' route\nE       assert {}\n\ntests/test_final_state.py:27: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_policies_json_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0007288497872650623,
+                "start": 1778726911.8605614,
+                "stop": 1778726911.8644416,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_policies_json_exists():\n        policies_path = os.path.join(PROJECT_DIR, \"config\", \"policies.json\")\n        assert os.path.isfile(policies_path), f\"Policies config file {policies_path} does not exist.\"\n    \n        with open(policies_path) as f:\n            policies_config = json.load(f)\n    \n>       policies = policies_config.get(\"policies\", [])\n                   ^^^^^^^^^^^^^^^^^^^\nE       AttributeError: 'list' object has no attribute 'get'\n\ntests/test_final_state.py:46: AttributeError",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}

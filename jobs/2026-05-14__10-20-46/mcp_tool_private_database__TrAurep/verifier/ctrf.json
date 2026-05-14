@@ -1,0 +1,80 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 0,
+            "failed": 6,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1778726314.915172,
+            "stop": 1778726375.3801136
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_db_server_directly",
+                "status": "failed",
+                "duration": 60.165904032532126,
+                "start": 1778726314.9411318,
+                "stop": 1778726375.3093255,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def start_servers():\n        # Start DB server\n        db_process = subprocess.Popen(\n            [\"node\", \"server.js\"],\n            cwd=DB_SERVER_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Start Zuplo server\n        zuplo_process = subprocess.Popen(\n            [\"npm\", \"run\", \"dev\"],\n            cwd=ZUPLO_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Wait for both ports\n        db_ready = wait_for_port(8080)\n        zuplo_ready = wait_for_port(3000)\n    \n        if not db_ready or not zuplo_ready:\n            import signal\n            if db_process.poll() is None:\n                os.killpg(os.getpgid(db_process.pid), signal.SIGTERM)\n            if zuplo_process.poll() is None:\n                os.killpg(os.getpgid(zuplo_process.pid), signal.SIGTERM)\n>           pytest.fail(\"Servers failed to start and listen on required ports.\")\nE           Failed: Servers failed to start and listen on required ports.\n\ntests/test_final_state.py:50: Failed"
+            },
+            {
+                "name": "test_final_state.py::test_internal_route_protected",
+                "status": "failed",
+                "duration": 0.0014559081755578518,
+                "start": 1778726375.3098311,
+                "stop": 1778726375.3454652,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def start_servers():\n        # Start DB server\n        db_process = subprocess.Popen(\n            [\"node\", \"server.js\"],\n            cwd=DB_SERVER_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Start Zuplo server\n        zuplo_process = subprocess.Popen(\n            [\"npm\", \"run\", \"dev\"],\n            cwd=ZUPLO_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Wait for both ports\n        db_ready = wait_for_port(8080)\n        zuplo_ready = wait_for_port(3000)\n    \n        if not db_ready or not zuplo_ready:\n            import signal\n            if db_process.poll() is None:\n                os.killpg(os.getpgid(db_process.pid), signal.SIGTERM)\n            if zuplo_process.poll() is None:\n                os.killpg(os.getpgid(zuplo_process.pid), signal.SIGTERM)\n>           pytest.fail(\"Servers failed to start and listen on required ports.\")\nE           Failed: Servers failed to start and listen on required ports.\n\ntests/test_final_state.py:50: Failed"
+            },
+            {
+                "name": "test_final_state.py::test_internal_route_with_auth",
+                "status": "failed",
+                "duration": 0.0010131928138434887,
+                "start": 1778726375.3459282,
+                "stop": 1778726375.3526251,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def start_servers():\n        # Start DB server\n        db_process = subprocess.Popen(\n            [\"node\", \"server.js\"],\n            cwd=DB_SERVER_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Start Zuplo server\n        zuplo_process = subprocess.Popen(\n            [\"npm\", \"run\", \"dev\"],\n            cwd=ZUPLO_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Wait for both ports\n        db_ready = wait_for_port(8080)\n        zuplo_ready = wait_for_port(3000)\n    \n        if not db_ready or not zuplo_ready:\n            import signal\n            if db_process.poll() is None:\n                os.killpg(os.getpgid(db_process.pid), signal.SIGTERM)\n            if zuplo_process.poll() is None:\n                os.killpg(os.getpgid(zuplo_process.pid), signal.SIGTERM)\n>           pytest.fail(\"Servers failed to start and listen on required ports.\")\nE           Failed: Servers failed to start and listen on required ports.\n\ntests/test_final_state.py:50: Failed"
+            },
+            {
+                "name": "test_final_state.py::test_mcp_server_auth",
+                "status": "failed",
+                "duration": 0.0004747961647808552,
+                "start": 1778726375.35302,
+                "stop": 1778726375.3631117,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def start_servers():\n        # Start DB server\n        db_process = subprocess.Popen(\n            [\"node\", \"server.js\"],\n            cwd=DB_SERVER_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Start Zuplo server\n        zuplo_process = subprocess.Popen(\n            [\"npm\", \"run\", \"dev\"],\n            cwd=ZUPLO_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Wait for both ports\n        db_ready = wait_for_port(8080)\n        zuplo_ready = wait_for_port(3000)\n    \n        if not db_ready or not zuplo_ready:\n            import signal\n            if db_process.poll() is None:\n                os.killpg(os.getpgid(db_process.pid), signal.SIGTERM)\n            if zuplo_process.poll() is None:\n                os.killpg(os.getpgid(zuplo_process.pid), signal.SIGTERM)\n>           pytest.fail(\"Servers failed to start and listen on required ports.\")\nE           Failed: Servers failed to start and listen on required ports.\n\ntests/test_final_state.py:50: Failed"
+            },
+            {
+                "name": "test_final_state.py::test_mcp_server_tool_list",
+                "status": "failed",
+                "duration": 0.0007167602889239788,
+                "start": 1778726375.3635764,
+                "stop": 1778726375.3724093,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def start_servers():\n        # Start DB server\n        db_process = subprocess.Popen(\n            [\"node\", \"server.js\"],\n            cwd=DB_SERVER_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Start Zuplo server\n        zuplo_process = subprocess.Popen(\n            [\"npm\", \"run\", \"dev\"],\n            cwd=ZUPLO_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Wait for both ports\n        db_ready = wait_for_port(8080)\n        zuplo_ready = wait_for_port(3000)\n    \n        if not db_ready or not zuplo_ready:\n            import signal\n            if db_process.poll() is None:\n                os.killpg(os.getpgid(db_process.pid), signal.SIGTERM)\n            if zuplo_process.poll() is None:\n                os.killpg(os.getpgid(zuplo_process.pid), signal.SIGTERM)\n>           pytest.fail(\"Servers failed to start and listen on required ports.\")\nE           Failed: Servers failed to start and listen on required ports.\n\ntests/test_final_state.py:50: Failed"
+            },
+            {
+                "name": "test_final_state.py::test_mcp_tool_execution",
+                "status": "failed",
+                "duration": 0.0007235361263155937,
+                "start": 1778726375.373033,
+                "stop": 1778726375.3798003,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def start_servers():\n        # Start DB server\n        db_process = subprocess.Popen(\n            [\"node\", \"server.js\"],\n            cwd=DB_SERVER_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Start Zuplo server\n        zuplo_process = subprocess.Popen(\n            [\"npm\", \"run\", \"dev\"],\n            cwd=ZUPLO_DIR,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.PIPE,\n            preexec_fn=os.setsid\n        )\n    \n        # Wait for both ports\n        db_ready = wait_for_port(8080)\n        zuplo_ready = wait_for_port(3000)\n    \n        if not db_ready or not zuplo_ready:\n            import signal\n            if db_process.poll() is None:\n                os.killpg(os.getpgid(db_process.pid), signal.SIGTERM)\n            if zuplo_process.poll() is None:\n                os.killpg(os.getpgid(zuplo_process.pid), signal.SIGTERM)\n>           pytest.fail(\"Servers failed to start and listen on required ports.\")\nE           Failed: Servers failed to start and listen on required ports.\n\ntests/test_final_state.py:50: Failed"
+            }
+        ]
+    }
+}
