@@ -1,7 +1,0 @@
-{
-  "library_name": "Zuplo",
-  "task_name": "zuplo-basic-proxy-auth",
-  "complexity_level": "multi-step sequential command set",
-  "research_plan_path": "plan.md",
-  "output_dir": "scratchpad/pending-tasks"
-}
