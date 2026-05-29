@@ -1,0 +1,58 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 1,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1779987442406,
+            "stop": 1779987443101
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_us_routing",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 300,
+                "start": 1779987442742,
+                "stop": 1779987443042,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_us_routing(start_app):\n        url = \"http://localhost:3000/route\"\n        headers = {\"cf-ipcountry\": \"US\"}\n        response = requests.get(url, headers=headers)\n        assert response.status_code == 200, f\"Expected status 200, got {response.status_code}\"\n        data = response.json()\n>       assert data.get(\"url\") == \"https://echo.zuplo.io/us\", f\"Expected url https://echo.zuplo.io/us, got {data.get('url')}\"\nE       AssertionError: Expected url https://echo.zuplo.io/us, got https://echo.zuplo.io/default\nE       assert 'https://echo...lo.io/default' == 'https://echo.zuplo.io/us'\nE         - https://echo.zuplo.io/us\nE         ?                        ^\nE         + https://echo.zuplo.io/default\nE         ?                       ++++ ^^\n\ntests/test_final_state.py:37: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_gb_routing",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 27,
+                "start": 1779987443043,
+                "stop": 1779987443070,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_gb_routing(start_app):\n        url = \"http://localhost:3000/route\"\n        headers = {\"cf-ipcountry\": \"GB\"}\n        response = requests.get(url, headers=headers)\n        assert response.status_code == 200, f\"Expected status 200, got {response.status_code}\"\n        data = response.json()\n>       assert data.get(\"url\") == \"https://echo.zuplo.io/gb\", f\"Expected url https://echo.zuplo.io/gb, got {data.get('url')}\"\nE       AssertionError: Expected url https://echo.zuplo.io/gb, got https://echo.zuplo.io/default\nE       assert 'https://echo...lo.io/default' == 'https://echo.zuplo.io/gb'\nE         - https://echo.zuplo.io/gb\nE         ?                       ^^\nE         + https://echo.zuplo.io/default\nE         ?                       ^^^^^^^\n\ntests/test_final_state.py:45: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_default_routing",
+                "status": "passed",
+                "duration": 29,
+                "start": 1779987443071,
+                "stop": 1779987443100,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}
