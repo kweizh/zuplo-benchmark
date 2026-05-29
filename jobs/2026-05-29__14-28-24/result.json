@@ -1,0 +1,47 @@
+{
+    "id": "4cd5899e-a812-4607-a245-4ad20f743fbc",
+    "started_at": "2026-05-29T14:28:26.948971",
+    "updated_at": "2026-05-29T14:39:44.995979",
+    "finished_at": "2026-05-29T14:39:44.995979",
+    "n_total_trials": 3,
+    "stats": {
+        "n_completed_trials": 3,
+        "n_errored_trials": 1,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "pochi__gemini-3-flash__tasks": {
+                "n_trials": 3,
+                "n_errors": 1,
+                "metrics": [
+                    {
+                        "mean": 0.3333333333333333
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "zuplo-basic-proxy-auth__C5i9zMi"
+                        ],
+                        "0.0": [
+                            "zuplo-custom-response-header__uqxyFmm",
+                            "zuplo-dynamic-routing__bKyPSpu"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "zuplo-custom-response-header__uqxyFmm"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 61180,
+        "cost_usd": null
+    }
+}
