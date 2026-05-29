@@ -6,8 +6,9 @@ Zuplo is a serverless, programmable API gateway designed for high performance at
 *   **Project Setup**:
     1.  **CLI Installation**: `npm install -g zuplo`
     2.  **Authentication**: Get an API Key from the [Zuplo Portal](https://portal.zuplo.com) (Settings > API Keys).
-    3.  **Initialization**: `zuplo init` in an empty directory or `npx create-zuplo-api@latest <name>` to scaffold a project.
-    4.  **Local Development**: `zuplo dev` starts a local gateway and the "Route Designer" UI.    5.  **Deployment**: `zuplo deploy --project <project-name>`
+    3.  **Initialization**: `npx -y create-zuplo-api@latest myproject --git=false --install=true --no-portal --no-eslint --yes` to scaffold a project.
+    4.  **Local Development**: `zuplo dev` starts a local gateway and the "Route Designer" UI.
+    5.  **Deployment**: `zuplo deploy --project <project-name>`
 ### 2. Core Primitives & APIs
 *   **`config/routes.oas.json`**: An OpenAPI 3.1 file where routes are defined. Zuplo uses the `x-zuplo-route` extension to bind handlers and policies.
     ```json
@@ -64,6 +65,7 @@ Zuplo is a serverless, programmable API gateway designed for high performance at
 *   **Module Resolution**: Zuplo uses a specific `$import()` syntax in JSON config. Local modules must start with `./modules/`.
 *   **Native Node.js Dependencies**: Zuplo runs in a Web-standard edge runtime, not Node.js. Packages using `fs`, `child_process`, or native C++ bindings will fail.
 *   **GET/HEAD Body Constraint**: Zuplo strictly enforces that `GET` and `HEAD` requests cannot have bodies, which can surprise developers using certain HTTP clients.
+*   **Start Dev Server**: It may take some time to start a dev server, please make sure the project could be built before starting the background server.
 ### 5. Evaluation Ideas
 1.  **Basic Proxy with Auth**: Create a route that proxies to a public API and requires a Zuplo-managed API Key.
 2.  **Custom Response Header**: Implement a custom outbound policy that adds a signature header based on the response body.
