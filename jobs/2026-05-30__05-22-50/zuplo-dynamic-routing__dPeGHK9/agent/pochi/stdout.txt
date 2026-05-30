@@ -1,0 +1,32 @@
+- Initializing MCP connections...
+You
+# Zuplo Dynamic Upstream Routing ## Background Zuplo is an edge-native API gateway that allows programmable routing. You need to implement dynamic upstream routing that proxies requests to different backends based on the client's country, determined via the `cf-ipcountry` header. ## Requirements * Create a Zuplo project. * Implement a custom route handler at `GET /api/data`. * The handler should check the `cf-ipcountry` header of the incoming request. * If the header is `US`, proxy the request to `https://echo.zuplo.io/us`. * For all other values (or if the header is missing), proxy the request to `https://echo.zuplo.io/default`. * The handler must return the exact response from the proxied backend. ## Implementation Hints * Use `npx -y create-zuplo-api@latest myproject --git=false --install=true --no-portal --no-eslint --yes` to scaffold a project. * Define the route in `config/routes.oas.json`. * Implement a custom module handler (e.g., in `modules/routing.ts`) that reads the `cf-ipcountry` header from the `ZuploRequest` and uses `fetch()` to proxy the request. * Make sure to return the `Response` object obtained from `fetch()`. ## Acceptance Criteria * Project path: /home/user/myproject * Start command: npm run dev * Port: 8787 * API Endpoints: * GET `/api/data`: Returns the response from `https://echo.zuplo.io/us` if `cf-ipcountry: US` is provided, otherwise returns the response from `https://echo.zuplo.io/default`.   
+
+Pochi
+💭 Thinking for 174 characters   
+📋 Updating todo list (5 items) ✔ 
+📂 Listing files in /home ✔ 
+💭 Thinking for 0 characters   
+💫 Executing npx -y create-zuplo-api@latest myproject --git=false --install=true --no-portal --no-eslint --yes ✔ 
+💭 Thinking for 0 characters   
+📋 Updating todo list (5 items) ✔ 
+💭 Thinking for 0 characters   
+📖 Reading /home/user/myproject/config/routes.oas.json ✔ 
+💭 Thinking for 249 characters   
+📂 Listing files in /home/user/myproject/modules ✔ 
+💭 Thinking for 199 characters   
+📖 Reading /home/user/myproject/modules/hello-world.ts ✔ 
+💭 Thinking for 379 characters   
+🔍 Searching for hello-world in *.json files in /home/user/myproject ✔ 
+💭 Thinking for 155 characters   
+🔍 Searching for \$import in *.json files in /home/user/myproject ✔ 
+💭 Thinking for 220 characters   
+🔧 Applying diff to /home/user/myproject/config/routes.oas.json ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/myproject/modules/routing.ts ✔ 
+💭 Thinking for 284 characters   
+📋 Updating todo list (5 items) ✔ 
+💭 Thinking for 148 characters   
+🎉 Task Completed
+Created the Zuplo project at /home/user/myproject, added the /api/data route, and implemented modules/routing.ts to proxy based on cf-ipcountry. Run npm run dev (default port 8787). GET /api/data routes to https://echo.zuplo.io/us when cf-ipcountry: US, otherwise https://echo.zuplo.io/default.   
+  
