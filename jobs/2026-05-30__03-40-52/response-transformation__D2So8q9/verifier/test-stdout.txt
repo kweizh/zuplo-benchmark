@@ -1,0 +1,92 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.0
+collected 1 item
+
+tests/test_final_state.py E                                              [100%]
+
+==================================== ERRORS ====================================
+______________ ERROR at setup of test_fetch_transformed_response _______________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7ff6edf6b6e0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Zuplo dev server using xprocess. Confirms readiness via port check.
+        """
+        # Ensure dependencies are installed before starting
+        os.system(f"cd {PROJECT_DIR} && npm install")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--port", "9000", "--editor-port", "9200", "--docs-port", "9300"]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port 9000 is accepting connections.
+                xprocess calls this repeatedly until it returns True or times out.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    return s.connect_ex(("localhost", 9000)) == 0
+    
+>       xprocess.ensure(Starter.name, Starter)
+
+tests/test_final_state.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7ff6ed638350>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+
+added 1 package, and audited 597 packages in 5s
+
+140 packages are looking for funding
+  run `npm fund` for details
+
+16 vulnerabilities (3 low, 2 moderate, 9 high, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 9000 --editor-port 9200 --docs-port 9300
+process 'start_app' started pid=3252
+=========================== short test summary info ============================
+ERROR tests/test_final_state.py::test_fetch_transformed_response - TimeoutErr...
+========================= 1 error in 185.71s (0:03:05) =========================

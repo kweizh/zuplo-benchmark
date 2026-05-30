@@ -1,0 +1,48 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.0
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+___________________________ test_custom_404_response ___________________________
+
+start_app = None
+
+    def test_custom_404_response(start_app):
+        run_id = os.environ.get("ZEALT_RUN_ID", "zr-12345")
+        url = "http://localhost:9000/some-random-missing-path"
+    
+        response = requests.get(url)
+    
+        # Check status code
+        assert response.status_code == 404, f"Expected status code 404, got {response.status_code}. Response: {response.text}"
+    
+        # Check headers
+        assert response.headers.get("x-custom-404") == "true", f"Expected header 'x-custom-404' to be 'true'. Headers: {response.headers}"
+        assert "application/json" in response.headers.get("content-type", ""), f"Expected 'application/json' in content-type, got {response.headers.get('content-type')}"
+    
+        # Check body
+        try:
+            data = response.json()
+        except ValueError:
+            pytest.fail(f"Response body is not valid JSON: {response.text}")
+    
+        assert data.get("error") == "Not Found", f"Expected error 'Not Found', got {data.get('error')}"
+        assert data.get("path") == "/some-random-missing-path", f"Expected path '/some-random-missing-path', got {data.get('path')}"
+>       assert data.get("run_id") == run_id, f"Expected run_id '{run_id}', got {data.get('run_id')}"
+E       AssertionError: Expected run_id 'zr-kjtfz8q', got None
+E       assert None == 'zr-kjtfz8q'
+E        +  where None = <built-in method get of dict object at 0x7f84b47ab300>('run_id')
+E        +    where <built-in method get of dict object at 0x7f84b47ab300> = {'error': 'Not Found', 'path': '/some-random-missing-path'}.get
+
+tests/test_final_state.py:58: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 9000 --editor-port 9200 --docs-port 9300
+process 'start_app' started pid=1873
+start_app process startup detected
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_custom_404_response - AssertionError: ...
+============================== 1 failed in 0.60s ===============================

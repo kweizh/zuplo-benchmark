@@ -1,0 +1,79 @@
+Skipping image OS validation for hb__request_body_cloning: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.12 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-bvfo2wv > /logs/artifacts/run-id && echo request_body_cloning__bvFo2Wv > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Request Body Cloning in Zuplo
+
+## Background
+In Zuplo, a common error is trying to read the body of a request or response twice (e.g., once for logging and once for forwarding). Because the body is a `ReadableStream`, it can only be read once. To log the body and still forward the request, developers must use `request.clone()` and `response.clone()` to avoid "body used" exceptions.
+
+## Requirements
+- Initialize a new Zuplo project.
+- Create a custom handler for the route `POST /api/echo`.
+- The handler must perform the following:
+  1. Read and log the incoming request body as text using `context.log.info()`. The log message must be exactly in the format: `Intercepted Request: <body>`.
+  2. Forward the request to an upstream service at `http://127.0.0.1:8080/echo` using `fetch()`.
+  3. Read and log the response body from the upstream service as text using `context.log.info()`. The log message must be exactly in the format: `Intercepted Response: <body>`.
+  4. Return the upstream response to the client.
+- Configure `config/routes.oas.json` to route `POST /api/echo` to your custom handler.
+
+## Implementation Hints
+- Use `npx -y create-zuplo-api@latest myproject --git=false --install=true --no-portal --no-eslint --yes` to scaffold the project.
+- Create a custom handler module (e.g., in `modules/`).
+- Use `request.clone()` to safely read the request body for logging while keeping the original `request` intact to pass to `fetch()`.
+- Use `response.clone()` to safely read the response body for logging while keeping the original `response` intact to return.
+- Make sure the route in `routes.oas.json` uses the `$import()` syntax to reference your custom handler.
+
+## Acceptance Criteria
+- Project path: /home/user/myproject
+- Start command: npm run dev
+- Port: 3000
+- API Endpoints:
+  - `POST /api/echo`: Accepts any text/JSON body, forwards it to `http://127.0.0.1:8080/echo`, and returns the upstream response.
+- The dev server output must contain the exact log messages for both the intercepted request and response bodies.
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured

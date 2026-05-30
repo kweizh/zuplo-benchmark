@@ -1,0 +1,46 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780113155266,
+            "stop": 1780113155795
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_proxy_without_api_key",
+                "status": "passed",
+                "duration": 130,
+                "start": 1780113155514,
+                "stop": 1780113155644,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_proxy_with_valid_api_key",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 149,
+                "start": 1780113155645,
+                "stop": 1780113155794,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_proxy_with_valid_api_key(start_app):\n        \"\"\"Test that accessing /proxy with the valid API key returns 200 OK.\"\"\"\n        headers = {\n            \"authorization\": \"Bearer test-api-key-123\"\n        }\n        response = requests.get(\"http://localhost:9200/proxy\", headers=headers)\n>       assert response.status_code == 200, f\"Expected status 200 with valid API key, got {response.status_code}. Response: {response.text}\"\nE       AssertionError: Expected status 200 with valid API key, got 500. Response: {\nE           \"type\": \"https://httpproblems.com/http-status/500\",\nE           \"title\": \"Internal Server Error\",\nE           \"status\": 500,\nE           \"detail\": \"ApiKeyInboundPolicy 'local-api-key' - unexpected response from Key Service. Status: 401\",\nE           \"instance\": \"/proxy\",\nE           \"trace\": {\nE             \"timestamp\": \"2026-05-30T03:52:35.729Z\",\nE             \"requestId\": \"44efd40e-fd81-4c57-b723-f74c47d9d011\",\nE             \"buildId\": \"3614aa55-ffa4-45d0-b887-9839dd6bb73f\"\nE           },\nE           \"cause\": {\nE             \"name\": \"RuntimeError\",\nE             \"message\": \"ApiKeyInboundPolicy 'local-api-key' - unexpected response from Key Service. Status: 401\",\nE             \"stack\": \"RuntimeError: ApiKeyInboundPolicy 'local-api-key' - unexpected response from Key Service. Status: 401\\n    at ul.ApiKeyInboundPolicy (chunk-K6IWBHOT.js:20309:11)\\n    at async executePolicyProcessor (chunk-K6IWBHOT.js:12758:14)\\n    at async corsProcessor (chunk-K6IWBHOT.js:12578:12)\\n    at async metricsProcessor (chunk-K6IWBHOT.js:12313:62)\\n    at async analyticsEventProcessor (chunk-K6IWBHOT.js:13149:12)\\n    at async t8.handleRequest (chunk-K6IWBHOT.js:13378:16)\"\nE           }\nE         }\nE       assert 500 == 200\nE        +  where 500 = <Response [500]>.status_code\n\ntests/test_final_state.py:48: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

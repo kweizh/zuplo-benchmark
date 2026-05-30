@@ -1,0 +1,37 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780115057136,
+            "stop": 1780115062116
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_cache_miss_and_hit",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 4801,
+                "start": 1780115057314,
+                "stop": 1780115062115,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_cache_miss_and_hit(start_app):\n        run_id = os.environ.get(\"ZEALT_RUN_ID\", \"default-run-id\")\n        url = f\"http://localhost:{PORT}/api/{run_id}/data\"\n    \n        # First Request (Cache Miss)\n        response1 = requests.get(url)\n        assert response1.status_code == 200, f\"First request failed with status code {response1.status_code}\"\n        assert \"x-cache\" in response1.headers, \"Response missing 'x-cache' header\"\n        assert response1.headers[\"x-cache\"] == \"miss\", f\"Expected x-cache 'miss', got {response1.headers['x-cache']}\"\n    \n        try:\n            data1 = response1.json()\n        except ValueError:\n            pytest.fail(\"First response body is not valid JSON\")\n    \n        # Second Request (Cache Hit)\n        response2 = requests.get(url)\n        assert response2.status_code == 200, f\"Second request failed with status code {response2.status_code}\"\n        assert \"x-cache\" in response2.headers, \"Response missing 'x-cache' header\"\n>       assert response2.headers[\"x-cache\"] == \"hit\", f\"Expected x-cache 'hit', got {response2.headers['x-cache']}\"\nE       AssertionError: Expected x-cache 'hit', got miss\nE       assert 'miss' == 'hit'\nE         - hit\nE         + miss\n\ntests/test_final_state.py:52: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

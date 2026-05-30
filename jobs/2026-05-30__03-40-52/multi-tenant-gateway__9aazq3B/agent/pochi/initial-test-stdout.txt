@@ -1,0 +1,28 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /bootstrap
+plugins: xprocess-1.0.2, json-ctrf-0.5.0
+collected 4 items
+
+bootstrap/test_initial_state.py::test_npm_available PASSED
+bootstrap/test_initial_state.py::test_project_dir_exists PASSED
+bootstrap/test_initial_state.py::test_package_json_exists PASSED
+bootstrap/test_initial_state.py::test_zuplo_json_exists FAILED
+
+=================================== FAILURES ===================================
+____________________________ test_zuplo_json_exists ____________________________
+
+    def test_zuplo_json_exists():
+        zuplo_json = os.path.join(PROJECT_DIR, "zuplo.json")
+>       assert os.path.isfile(zuplo_json), f"zuplo.json not found at {zuplo_json}."
+E       AssertionError: zuplo.json not found at /home/user/myproject/zuplo.json.
+E       assert False
+E        +  where False = <function isfile at 0x7f3a32b54220>('/home/user/myproject/zuplo.json')
+E        +    where <function isfile at 0x7f3a32b54220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+bootstrap/test_initial_state.py:19: AssertionError
+=========================== short test summary info ============================
+FAILED bootstrap/test_initial_state.py::test_zuplo_json_exists - AssertionErr...
+========================= 1 failed, 3 passed in 0.06s ==========================
+pytest-xprocess reminder::Be sure to terminate the started process by running 'pytest --xkill' if you have not explicitly done so in your fixture with 'xprocess.getinfo(<process_name>).terminate()'.
