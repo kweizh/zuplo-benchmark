@@ -1,0 +1,37 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780132181873,
+            "stop": 1780132299443
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_fetch_transformed_response",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 117137,
+                "start": 1780132182306,
+                "stop": 1780132299443,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_fetch_transformed_response(start_app):\n        \"\"\"\n        Verify that the /legacy-data endpoint returns the transformed JSON response.\n        \"\"\"\n        url = \"http://localhost:9000/legacy-data\"\n        try:\n            response = requests.get(url, timeout=10)\n        except requests.exceptions.RequestException as e:\n            pytest.fail(f\"Failed to connect to {url}: {e}\")\n    \n>       assert response.status_code == 200, f\"Expected status 200, got {response.status_code}\"\nE       AssertionError: Expected status 200, got 404\nE       assert 404 == 200\nE        +  where 404 = <Response [404]>.status_code\n\ntests/test_final_state.py:53: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

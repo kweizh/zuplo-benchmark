@@ -1,0 +1,68 @@
+- Initializing MCP connections...
+You
+# Zuplo Circuit Breaker Policy ## Background Zuplo allows you to build custom policies using TypeScript. To protect downstream services from cascading failures, you need to implement a Circuit Breaker pattern that stops forwarding requests to a backend if it is consistently failing. ## Requirements * Create a custom policy in Zuplo that acts as a circuit breaker. * The policy should monitor the response status from the backend. * If the backend returns a 5xx status code for 5 consecutive requests, the circuit breaker should "trip" (open). * When the circuit breaker is open, the gateway should immediately return a `503 Service Unavailable` response to the client without calling the backend. * Use Zuplo's `ZoneCache` to store the circuit breaker state (e.g., consecutive failure count, circuit state) across requests, ensuring it is scoped correctly. * Apply this policy to a route `GET /api/data` that proxies to a backend URL (provided via environment variable or hardcoded for testing). * Ensure the circuit breaker state is isolated per `run-id` by appending the `run-id` to the cache key. ## Implementation Hints * You may need both an inbound policy (to check if the circuit is open and reject early) and an outbound policy (to monitor the backend response and update the failure count). * Read the current `run-id` from the `ZEALT_RUN_ID` environment variable. * Use `ZoneCache` to persist the failure count and state. Use the `run-id` in the cache key to avoid conflicts between parallel test runs. * Use `HttpProblems.serviceUnavailable` or return a `new Response` with status 503 when the circuit is open. * Create a route in `config/routes.oas.json` and configure the policies in `config/policies.json`. ## Acceptance Criteria * Project path: /home/user/myproject * Start command: npm run start (or zuplo dev) * Port: 3000 * Route: `GET /api/data` proxies to a backend. * When the backend returns 200, the route returns 200. * When the backend returns 500 for 5 consecutive requests, the 6th request must return 503 immediately without hitting the backend, and the response should indicate the service is unavailable. * The cache key used to store the circuit state MUST include the `run-id` from the `ZEALT_RUN_ID` environment variable.   
+
+Pochi
+💭 Thinking for 469 characters   
+📋 Updating todo list (6 items) ✔ 
+💭 Thinking for 42 characters   
+📂 Listing files in /home/user/myproject recursively ✔ 
+💭 Thinking for 119 characters   
+📖 Reading /home/user/myproject/config/routes.oas.json ✔ 
+📖 Reading /home/user/myproject/config/policies.json ✔ 
+📖 Reading /home/user/myproject/package.json ✔ 
+📖 Reading /home/user/myproject/modules/hello-world.ts ✔ 
+📖 Reading /home/user/myproject/zuplo.jsonc ✔ 
+💭 Thinking for 113 characters   
+Let me check the Zuplo runtime types to understand the ZoneCache and policy APIs:   
+🔍 Searching for ZoneCache|HttpProblems|export.*PolicyInbound|export.*PolicyOutbound in *.d.ts files in /home/user/myproject/node_modules/@zuplo/runtime ✔ 
+📖 Reading /home/user/myproject/tsconfig.json ✔ 
+💭 Thinking for 89 characters   
+📖 Reading /home/user/myproject/node_modules/@zuplo/runtime/out/types/index.d.ts ✔ 
+📖 Reading /home/user/myproject/node_modules/@zuplo/runtime/out/types/index.d.ts ✔ 
+📖 Reading /home/user/myproject/node_modules/@zuplo/runtime/out/types/index.d.ts ✔ 
+💭 Thinking for 107 characters   
+🔍 Searching for serviceUnavailable|503 in *.d.ts files in /home/user/myproject/node_modules/@zuplo/runtime ✔ 
+🔍 Searching for PolicyInboundPlugin|PolicyOutboundPlugin|interface.*Policy in *.d.ts files in /home/user/myproject/node_modules/@zuplo/runtime ✔ 
+💭 Thinking for 124 characters   
+📖 Reading /home/user/myproject/node_modules/@zuplo/runtime/out/types/index.d.ts ✔ 
+📖 Reading /home/user/myproject/node_modules/@zuplo/runtime/out/types/index.d.ts ✔ 
+📖 Reading /home/user/myproject/node_modules/@zuplo/runtime/out/types/index.d.ts ✔ 
+💭 Thinking for 93 characters   
+🔍 Searching for class OutboundPolicy in *.d.ts files in /home/user/myproject/node_modules/@zuplo/runtime ✔ 
+📖 Reading /home/user/myproject/node_modules/@zuplo/runtime/out/types/index.d.ts ✔ 
+💭 Thinking for 101 characters   
+🔍 Searching for environment|ZEALT|getEnv in index.d.ts files in /home/user/myproject/node_modules/@zuplo/runtime/out/types ✔ 
+💭 Thinking for 114 characters   
+Now I have all the information needed. Let me create the circuit breaker implementation.   
+📋 Updating todo list (6 items) ✔ 
+✏️  Writing /home/user/myproject/modules/circuit-breaker-inbound.ts ✔ 
+📋 Updating todo list (6 items) ✔ 
+✏️  Writing /home/user/myproject/modules/circuit-breaker-outbound.ts ✔ 
+📋 Updating todo list (6 items) ✔ 
+Now let me update the routes configuration to add the `GET /api/data` route:   
+✏️  Writing /home/user/myproject/config/routes.oas.json ✔ 
+📋 Updating todo list (6 items) ✔ 
+Now let me configure the policies:   
+✏️  Writing /home/user/myproject/config/policies.json ✔ 
+📋 Updating todo list (6 items) ✔ 
+Let me verify the project compiles and check the start command:   
+📖 Reading /home/user/myproject/env.example ✔ 
+💫 Executing cd /home/user/myproject && npx zuplo build 2>&1 | head -50 ✔ 
+💭 Thinking for 257 characters   
+The build succeeds. Let me start the dev server and run a quicktest:   
+🛠️ Tool startBackgroundJob ✔ 
+💫 Executing sleep 8 && curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/data ✖ "Command exited with code 7"
+🛠️ Tool readBackgroundJobOutput ✔ 
+💫 Executing curl -sv http://localhost:3000/api/data 2>&1 | head -30 ✔ 
+💭 Thinking for 423 characters   
+The server runs but the `$env(BACKEND_URL)` isn't resolving from the process environment. Let me check how Zuplo loads environment variables locally:   
+💫 Executing ls -la /home/user/myproject/.env* 2>/dev/null; cat /home/user/myproject/.env 2>/dev/null; echo "---"; ls -la /home/user/myproject/config/ 2>/dev/null ✔ 
+🔍 Searching for local env|\.env|zuplo\.env in *.md files in /home/user/myproject/node_modules/@zuplo ✔ 
+💭 Thinking for 504 characters   
+🛠️ Tool killBackgroundJob ✔ 
+✏️  Writing /home/user/myproject/.env ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+💫 Executing sleep 10 && curl -sv http://localhost:3000/api/data 2>&1 ✔ 
+💭 Thinking for 644 characters   
+🔍 Searching for \.env|localEnv|envFile|env_file in *.js files in /home/user/myproject/node_modules/@zuplo/cli ✔ 

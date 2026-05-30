@@ -1,0 +1,49 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 0,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780130419497,
+            "stop": 1780130432348
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_proxy_without_api_key",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 11535,
+                "start": 1780130420481,
+                "stop": 1780130432016,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_proxy_without_api_key(start_app):\n        \"\"\"Test that accessing /proxy without an API key returns 401 Unauthorized.\"\"\"\n        response = requests.get(\"http://localhost:9200/proxy\")\n>       assert response.status_code == 401, f\"Expected status 401 without API key, got {response.status_code}\"\nE       AssertionError: Expected status 401 without API key, got 404\nE       assert 404 == 401\nE        +  where 404 = <Response [404]>.status_code\n\ntests/test_final_state.py:40: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_proxy_with_valid_api_key",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 331,
+                "start": 1780130432017,
+                "stop": 1780130432348,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_proxy_with_valid_api_key(start_app):\n        \"\"\"Test that accessing /proxy with the valid API key returns 200 OK.\"\"\"\n        headers = {\n            \"authorization\": \"Bearer test-api-key-123\"\n        }\n        response = requests.get(\"http://localhost:9200/proxy\", headers=headers)\n>       assert response.status_code == 200, f\"Expected status 200 with valid API key, got {response.status_code}. Response: {response.text}\"\nE       AssertionError: Expected status 200 with valid API key, got 404. Response: {\nE           \"type\": \"https://httpproblems.com/http-status/404\",\nE           \"title\": \"Not Found\",\nE           \"status\": 404,\nE           \"instance\": \"/proxy\",\nE           \"trace\": {\nE             \"timestamp\": \"2026-05-30T08:40:32.021Z\",\nE             \"requestId\": \"a808cc1e-40a9-4172-8834-08c0784a05a2\",\nE             \"buildId\": \"6ff02373-5cb4-4c87-8604-2d4373619f1a\"\nE           }\nE         }\nE       assert 404 == 200\nE        +  where 404 = <Response [404]>.status_code\n\ntests/test_final_state.py:48: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

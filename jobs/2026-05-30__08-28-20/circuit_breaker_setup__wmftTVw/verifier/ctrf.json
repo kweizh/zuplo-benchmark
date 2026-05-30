@@ -1,0 +1,37 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780133309931,
+            "stop": 1780133311043
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_circuit_breaker",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 742,
+                "start": 1780133310299,
+                "stop": 1780133311041,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_zuplo = None\n\n    def test_circuit_breaker(start_zuplo):\n        \"\"\"Verifies the circuit breaker trips after 5 consecutive 5xx errors.\"\"\"\n    \n        # 1. Initial State: Backend returns 200\n        requests.post(\"http://localhost:8080/set-status\", json={\"status\": 200})\n        resp = requests.get(\"http://localhost:3000/api/data\")\n>       assert resp.status_code == 200, f\"Expected 200 OK when backend is healthy, got {resp.status_code}\"\nE       AssertionError: Expected 200 OK when backend is healthy, got 500\nE       assert 500 == 200\nE        +  where 500 = <Response [500]>.status_code\n\ntests/test_final_state.py:97: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

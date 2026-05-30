@@ -1,0 +1,54 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.0
+collected 4 items
+
+tests/test_final_state.py FF..                                           [100%]
+
+=================================== FAILURES ===================================
+______________________________ test_eu_routing_gb ______________________________
+
+start_app = None
+
+    def test_eu_routing_gb(start_app):
+        url = "http://localhost:8080/api/data"
+        headers = {"cf-ipcountry": "GB"}
+        response = requests.get(url, headers=headers)
+        assert response.status_code == 200, f"Expected status 200, got {response.status_code}"
+        data = response.json()
+>       assert "https://echo.zuplo.io/eu/api/data" in data.get("url", ""), f"Expected URL to be EU, got {data.get('url')}"
+E       AssertionError: Expected URL to be EU, got https://echo.zuplo.io/us/api/data
+E       assert 'https://echo.zuplo.io/eu/api/data' in 'https://echo.zuplo.io/us/api/data'
+E        +  where 'https://echo.zuplo.io/us/api/data' = <built-in method get of dict object at 0x7f223496a200>('url', '')
+E        +    where <built-in method get of dict object at 0x7f223496a200> = {'headers': {'accept-encoding': 'gzip, br', 'connection': 'Keep-Alive', 'host': 'echo.zuplo.io', 'true-client-ip': '34.145.37.54', ...}, 'method': 'GET', 'query': {}, 'url': 'https://echo.zuplo.io/us/api/data'}.get
+
+tests/test_final_state.py:37: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npx zuplo dev --port 8080
+process 'start_app' started pid=1827
+start_app process startup detected
+______________________________ test_eu_routing_fr ______________________________
+
+start_app = None
+
+    def test_eu_routing_fr(start_app):
+        url = "http://localhost:8080/api/data"
+        headers = {"cf-ipcountry": "FR"}
+        response = requests.get(url, headers=headers)
+        assert response.status_code == 200, f"Expected status 200, got {response.status_code}"
+        data = response.json()
+>       assert "https://echo.zuplo.io/eu/api/data" in data.get("url", ""), f"Expected URL to be EU, got {data.get('url')}"
+E       AssertionError: Expected URL to be EU, got https://echo.zuplo.io/us/api/data
+E       assert 'https://echo.zuplo.io/eu/api/data' in 'https://echo.zuplo.io/us/api/data'
+E        +  where 'https://echo.zuplo.io/us/api/data' = <built-in method get of dict object at 0x7f22348055c0>('url', '')
+E        +    where <built-in method get of dict object at 0x7f22348055c0> = {'headers': {'accept-encoding': 'gzip, br', 'connection': 'Keep-Alive', 'host': 'echo.zuplo.io', 'true-client-ip': '34.145.37.54', ...}, 'method': 'GET', 'query': {}, 'url': 'https://echo.zuplo.io/us/api/data'}.get
+
+tests/test_final_state.py:45: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_us_routing_jp
+PASSED tests/test_final_state.py::test_us_routing_missing_header
+FAILED tests/test_final_state.py::test_eu_routing_gb - AssertionError: Expect...
+FAILED tests/test_final_state.py::test_eu_routing_fr - AssertionError: Expect...
+========================= 2 failed, 2 passed in 0.79s ==========================
