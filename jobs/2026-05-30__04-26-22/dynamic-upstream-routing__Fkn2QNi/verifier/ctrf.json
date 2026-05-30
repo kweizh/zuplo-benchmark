@@ -1,0 +1,67 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 2,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780118263052,
+            "stop": 1780118263942
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_eu_routing_gb",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 279,
+                "start": 1780118263559,
+                "stop": 1780118263838,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_eu_routing_gb(start_app):\n        url = \"http://localhost:8080/api/data\"\n        headers = {\"cf-ipcountry\": \"GB\"}\n        response = requests.get(url, headers=headers)\n        assert response.status_code == 200, f\"Expected status 200, got {response.status_code}\"\n        data = response.json()\n>       assert \"https://echo.zuplo.io/eu/api/data\" in data.get(\"url\", \"\"), f\"Expected URL to be EU, got {data.get('url')}\"\nE       AssertionError: Expected URL to be EU, got https://echo.zuplo.io/us/api/data\nE       assert 'https://echo.zuplo.io/eu/api/data' in 'https://echo.zuplo.io/us/api/data'\nE        +  where 'https://echo.zuplo.io/us/api/data' = <built-in method get of dict object at 0x7efc07cba9c0>('url', '')\nE        +    where <built-in method get of dict object at 0x7efc07cba9c0> = {'headers': {'accept': '*/*', 'accept-encoding': 'gzip, br', 'connection': 'Keep-Alive', 'host': 'echo.zuplo.io', ...}, 'method': 'GET', 'query': {}, 'url': 'https://echo.zuplo.io/us/api/data'}.get\n\ntests/test_final_state.py:37: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_eu_routing_fr",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 34,
+                "start": 1780118263839,
+                "stop": 1780118263873,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_eu_routing_fr(start_app):\n        url = \"http://localhost:8080/api/data\"\n        headers = {\"cf-ipcountry\": \"FR\"}\n        response = requests.get(url, headers=headers)\n        assert response.status_code == 200, f\"Expected status 200, got {response.status_code}\"\n        data = response.json()\n>       assert \"https://echo.zuplo.io/eu/api/data\" in data.get(\"url\", \"\"), f\"Expected URL to be EU, got {data.get('url')}\"\nE       AssertionError: Expected URL to be EU, got https://echo.zuplo.io/us/api/data\nE       assert 'https://echo.zuplo.io/eu/api/data' in 'https://echo.zuplo.io/us/api/data'\nE        +  where 'https://echo.zuplo.io/us/api/data' = <built-in method get of dict object at 0x7efc07b51940>('url', '')\nE        +    where <built-in method get of dict object at 0x7efc07b51940> = {'headers': {'accept': '*/*', 'accept-encoding': 'gzip, br', 'connection': 'Keep-Alive', 'host': 'echo.zuplo.io', ...}, 'method': 'GET', 'query': {}, 'url': 'https://echo.zuplo.io/us/api/data'}.get\n\ntests/test_final_state.py:45: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_us_routing_jp",
+                "status": "passed",
+                "duration": 25,
+                "start": 1780118263874,
+                "stop": 1780118263899,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_us_routing_missing_header",
+                "status": "passed",
+                "duration": 41,
+                "start": 1780118263900,
+                "stop": 1780118263941,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

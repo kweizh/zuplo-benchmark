@@ -1,0 +1,55 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 2,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780117824039,
+            "stop": 1780117824889
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_us_request",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 309,
+                "start": 1780117824497,
+                "stop": 1780117824806,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_us_request(start_app):\n        \"\"\"Test that requests with cf-ipcountry: US are routed to the US backend.\"\"\"\n        response = requests.get(\"http://localhost:8787/api/data\", headers={\"cf-ipcountry\": \"US\"})\n        assert response.status_code == 200, f\"Expected status 200, got {response.status_code}\"\n>       assert \"/us\" in response.text, f\"Expected response to contain '/us', got: {response.text}\"\nE       AssertionError: Expected response to contain '/us', got: {\nE           \"url\": \"https://echo.zuplo.io/default\",\nE           \"method\": \"GET\",\nE           \"query\": {},\nE           \"headers\": {\nE             \"accept\": \"*/*\",\nE             \"accept-encoding\": \"gzip, br\",\nE             \"connection\": \"Keep-Alive\",\nE             \"host\": \"echo.zuplo.io\",\nE             \"true-client-ip\": \"34.145.37.54\",\nE             \"user-agent\": \"python-requests/2.34.2\",\nE             \"x-forwarded-proto\": \"https\",\nE             \"x-real-ip\": \"34.145.37.54\",\nE             \"zp-rid\": \"c955c0ee-4ab0-493c-9587-d76231a74f58\"\nE           }\nE         }\nE       assert '/us' in '{\\n  \"url\": \"https://echo.zuplo.io/default\",\\n  \"method\": \"GET\",\\n  \"query\": {},\\n  \"headers\": {\\n    \"accept\": \"*/*\"...arded-proto\": \"https\",\\n    \"x-real-ip\": \"34.145.37.54\",\\n    \"zp-rid\": \"c955c0ee-4ab0-493c-9587-d76231a74f58\"\\n  }\\n}'\nE        +  where '{\\n  \"url\": \"https://echo.zuplo.io/default\",\\n  \"method\": \"GET\",\\n  \"query\": {},\\n  \"headers\": {\\n    \"accept\": \"*/*\"...arded-proto\": \"https\",\\n    \"x-real-ip\": \"34.145.37.54\",\\n    \"zp-rid\": \"c955c0ee-4ab0-493c-9587-d76231a74f58\"\\n  }\\n}' = <Response [200]>.text\n\ntests/test_final_state.py:41: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_default_request",
+                "status": "passed",
+                "duration": 33,
+                "start": 1780117824807,
+                "stop": 1780117824840,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_other_country_request",
+                "status": "passed",
+                "duration": 46,
+                "start": 1780117824843,
+                "stop": 1780117824889,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

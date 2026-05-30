@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.0
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_circuit_breaker _____________________________
+
+start_zuplo = None
+
+    def test_circuit_breaker(start_zuplo):
+        """Verifies the circuit breaker trips after 5 consecutive 5xx errors."""
+    
+        # 1. Initial State: Backend returns 200
+        requests.post("http://localhost:8080/set-status", json={"status": 200})
+        resp = requests.get("http://localhost:3000/api/data")
+        assert resp.status_code == 200, f"Expected 200 OK when backend is healthy, got {resp.status_code}"
+    
+        # 2. Trigger Failures: Backend returns 500
+        requests.post("http://localhost:8080/set-status", json={"status": 500})
+        for i in range(5):
+            resp = requests.get("http://localhost:3000/api/data")
+>           assert resp.status_code == 500, f"Expected 500 from backend on request {i+1}, got {resp.status_code}"
+E           AssertionError: Expected 500 from backend on request 1, got 200
+E           assert 200 == 500
+E            +  where 200 = <Response [200]>.status_code
+
+tests/test_final_state.py:103: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/zuplo_dev$ npm run dev -- --port 3000
+process 'zuplo_dev' started pid=3335
+zuplo_dev process startup detected
+---------------------------- Captured stderr setup -----------------------------
+127.0.0.1 - - [30/May/2026 05:14:34] "GET / HTTP/1.1" 200 -
+----------------------------- Captured stderr call -----------------------------
+127.0.0.1 - - [30/May/2026 05:14:34] "POST /set-status HTTP/1.1" 200 -
+127.0.0.1 - - [30/May/2026 05:14:34] "POST /set-status HTTP/1.1" 200 -
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_circuit_breaker - AssertionError: Expe...
+============================== 1 failed in 1.32s ===============================

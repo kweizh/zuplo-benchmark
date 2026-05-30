@@ -1,0 +1,37 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780116677442,
+            "stop": 1780116678023
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_custom_404_response",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 201,
+                "start": 1780116677821,
+                "stop": 1780116678022,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_custom_404_response(start_app):\n        run_id = os.environ.get(\"ZEALT_RUN_ID\", \"zr-12345\")\n        url = \"http://localhost:9000/some-random-missing-path\"\n    \n        response = requests.get(url)\n    \n        # Check status code\n        assert response.status_code == 404, f\"Expected status code 404, got {response.status_code}. Response: {response.text}\"\n    \n        # Check headers\n        assert response.headers.get(\"x-custom-404\") == \"true\", f\"Expected header 'x-custom-404' to be 'true'. Headers: {response.headers}\"\n        assert \"application/json\" in response.headers.get(\"content-type\", \"\"), f\"Expected 'application/json' in content-type, got {response.headers.get('content-type')}\"\n    \n        # Check body\n        try:\n            data = response.json()\n        except ValueError:\n            pytest.fail(f\"Response body is not valid JSON: {response.text}\")\n    \n        assert data.get(\"error\") == \"Not Found\", f\"Expected error 'Not Found', got {data.get('error')}\"\n        assert data.get(\"path\") == \"/some-random-missing-path\", f\"Expected path '/some-random-missing-path', got {data.get('path')}\"\n>       assert data.get(\"run_id\") == run_id, f\"Expected run_id '{run_id}', got {data.get('run_id')}\"\nE       AssertionError: Expected run_id 'zr-3ttachv', got None\nE       assert None == 'zr-3ttachv'\nE        +  where None = <built-in method get of dict object at 0x7f05371deec0>('run_id')\nE        +    where <built-in method get of dict object at 0x7f05371deec0> = {'error': 'Not Found', 'path': '/some-random-missing-path'}.get\n\ntests/test_final_state.py:58: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}
