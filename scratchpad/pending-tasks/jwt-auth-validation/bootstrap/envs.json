@@ -1,0 +1,9 @@
+{
+    "task": [
+        "JWT_SECRET",
+        "ZUPLO_API_KEY"
+    ],
+    "verifier": [
+        "JWT_SECRET"
+    ]
+}
