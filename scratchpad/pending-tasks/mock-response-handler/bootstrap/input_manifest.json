@@ -1,7 +1,0 @@
-{
-  "library_name": "Zuplo",
-  "task_name": "mock_response_handler",
-  "complexity_level": "simple set of 2-5 commands",
-  "research_plan_path": "plan.md",
-  "output_dir": "scratchpad/pending-tasks"
-}
