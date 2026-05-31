@@ -1,0 +1,67 @@
+- Initializing MCP connections...
+You
+# Configure Strict Timeouts for Upstream Requests ## Background Zuplo is an edge-native API gateway where custom handlers can be written in TypeScript using standard Web APIs. When proxying requests to an upstream backend, it's critical to enforce strict timeouts to prevent hanging connections and ensure a responsive gateway. In this task, you will create a custom handler that enforces a timeout when calling an upstream service. ## Requirements * Create a custom request handler in Zuplo that proxies incoming requests to an upstream backend. * The upstream backend URL must be read from the `UPSTREAM_URL` environment variable. * The timeout duration (in milliseconds) must be read from the `UPSTREAM_TIMEOUT_MS` environment variable. * If the upstream backend does not respond within the specified timeout, the handler must return an HTTP `504 Gateway Timeout` response. * If the upstream backend responds within the timeout, the handler must return the upstream's response. * Map this custom handler to a `GET /proxy` route in the Zuplo configuration. ## Implementation Hints * Use the `environment` object from `@zuplo/runtime` to read the `UPSTREAM_URL` and `UPSTREAM_TIMEOUT_MS` variables. * Use the native `fetch` API combined with standard Web APIs (like `AbortSignal.timeout()`) to enforce the timeout on the request. * Catch the resulting error (typically an `AbortError` or `TimeoutError`) from `fetch` and return a `new Response` with status `504`. * Configure the route in `config/routes.oas.json` to point to your custom handler module. * Do not use URL Rewrite or URL Forward built-in handlers, as they do not support custom timeout configurations natively without custom code. ## Acceptance Criteria * Project path: /home/user/myproject * Start command: zuplo dev --no-start-editor --no-start-docs --port 9200 * Port: 9200 * API Endpoints: * GET `/proxy`: Proxies the request to `UPSTREAM_URL`. * If the upstream response time > `UPSTREAM_TIMEOUT_MS`, returns status 504. * If the upstream response time <= `UPSTREAM_TIMEOUT_MS`, returns the upstream's response status and body.   
+
+Pochi
+💭 Thinking for 315 characters   
+📂 Listing files in /home/user/myproject recursively ✔ 
+📋 Updating todo list (2 items) ✔ 
+📖 Reading home/user/myproject/modules/hello-world.ts ✔ 
+💭 Thinking for 323 characters   
+📖 Reading home/user/myproject/config/routes.oas.json ✔ 
+💭 Thinking for 267 characters   
+📋 Updating todo list (2 items) ✔ 
+✏️  Writing home/user/myproject/modules/proxy.ts ✔ 
+💭 Thinking for 181 characters   
+📋 Updating todo list (2 items) ✔ 
+🔧 Applying diff to home/user/myproject/config/routes.oas.json ✖ "Expected 1 occurrences but found 2. Please verify the search content and expectedReplacements parameter."
+🔧 Applying diff to home/user/myproject/config/routes.oas.json ✔ 
+💭 Thinking for 1298 characters   
+📂 Listing files in home/user/myproject ✔ 
+📖 Reading home/user/myproject/env.example ✔ 
+💭 Thinking for 1162 characters   
+📋 Updating todo list (2 items) ✔ 
+📖 Reading home/user/myproject/modules/proxy.ts ✔ 
+📖 Reading home/user/myproject/config/routes.oas.json ✔ 
+💭 Thinking for 343 characters   
+🎉 Task Completed
+I have configured strict timeouts for upstream requests in the Zuplo project by implementing a custom handler and mapping it to a new route.
+
+### Changes Made:
+
+1.  **Created Custom Handler**:
+    *   Added a new file `modules/proxy.ts` which implements the proxy logic.
+    *   The handler reads `UPSTREAM_URL` and `UPSTREAM_TIMEOUT_MS` from the Zuplo `environment` object.
+    *   It uses the native `fetch` API with `AbortSignal.timeout()` to enforce the specified timeout.
+    *   If a timeout occurs (catching `TimeoutError` or `AbortError`), it returns an HTTP `504 Gateway Timeout` response.
+    *   Otherwise, it returns the upstream's response.
+
+2.  **Configured Route**:
+    *   Modified `config/routes.oas.json` to add a new `GET /proxy` route.
+    *   The route is configured to use the custom handler from `modules/proxy.ts`.
+
+### Implementation Detail:
+```typescript
+import { ZuploContext, ZuploRequest, environment } from "@zuplo/runtime";
+
+export default async function (request: ZuploRequest, context: ZuploContext) {
+  const upstreamUrl = environment.UPSTREAM_URL;
+  const timeoutMs = parseInt(environment.UPSTREAM_TIMEOUT_MS, 10);
+
+  try {
+    const response = await fetch(upstreamUrl, {
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    return response;
+  } catch (err) {
+    if (err.name === "TimeoutError" || err.name === "AbortError") {
+      return new Response("Gateway Timeout", { status: 504 });
+    }
+    context.log.error(`Upstream request failed: ${err.message}`);
+    return new Response(`Internal Server Error: ${err.message}`, { status: 500 });
+  }
+}
+```
+
+This implementation ensures that any request to `/proxy` will respect the strict timeout defined in the environment variables, providing a responsive gateway even when backends are slow or hanging.   
+  
