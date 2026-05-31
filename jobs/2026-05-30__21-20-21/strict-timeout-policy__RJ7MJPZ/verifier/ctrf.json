@@ -1,0 +1,49 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 0,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1780177134513,
+            "stop": 1780177152373
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_fast_response",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 12614,
+                "start": 1780177134792,
+                "stop": 1780177147406,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_zuplo_fast = None\n\n    def test_fast_response(start_zuplo_fast):\n        response = requests.get(\"http://localhost:9200/proxy\")\n>       assert response.status_code == 200, f\"Expected status 200 for fast response, got {response.status_code}. Response: {response.text}\"\nE       AssertionError: Expected status 200 for fast response, got 500. Response: UPSTREAM_URL is not configured\nE       assert 500 == 200\nE        +  where 500 = <Response [500]>.status_code\n\ntests/test_final_state.py:103: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_slow_response_timeout",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 4965,
+                "start": 1780177147407,
+                "stop": 1780177152372,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_zuplo_slow = None\n\n    def test_slow_response_timeout(start_zuplo_slow):\n        response = requests.get(\"http://localhost:9200/proxy\")\n>       assert response.status_code == 504, f\"Expected status 504 for slow response timeout, got {response.status_code}. Response: {response.text}\"\nE       AssertionError: Expected status 504 for slow response timeout, got 500. Response: UPSTREAM_URL is not configured\nE       assert 500 == 504\nE        +  where 500 = <Response [500]>.status_code\n\ntests/test_final_state.py:108: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,81 @@
+Skipping image OS validation for hb__header-based-api-versioning: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.12 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-yu2imvh > /logs/artifacts/run-id && echo header-based-api-versioning__Yu2imvh > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# API Versioning with Zuplo
+
+## Background
+Zuplo is an edge-native API gateway that allows programmable routing and policies. In this task, you will implement header-based API versioning where requests to a single endpoint are routed to different backend URLs depending on the value of a specific HTTP header.
+
+## Requirements
+- Create a new Zuplo project in `/home/user/myproject`.
+- Implement a single route for `GET /api/data`.
+- Inspect the `api-version` header of the incoming request.
+- If `api-version` is `v2`, route the request to `https://echo.zuplo.io/v2/data`.
+- If `api-version` is `v1` or not provided, route the request to `https://echo.zuplo.io/v1/data`.
+- Ensure the dev server runs on port 9200.
+- **IMPORTANT**: Kill the background dev server before completing the task.
+
+## Implementation Hints
+- Create the project using: `npx -y create-zuplo-api@latest myproject --git=false --install=true --no-portal --no-eslint --yes`
+- You can implement this using a custom handler in the `modules/` directory that reads `request.headers.get("api-version")`, constructs the target URL, and uses `fetch()` to proxy the request.
+- Map your custom handler to the `GET /api/data` route in `config/routes.oas.json`.
+- Start the dev server on port 9200 (e.g., `npx zuplo dev --port 9200`).
+
+## Acceptance Criteria
+- Project path: /home/user/myproject
+- Start command: npx zuplo dev --port 9200
+- Port: 9200
+- API Endpoints:
+  - GET `/api/data`:
+    - When header `api-version: v1` is provided, returns the response from `https://echo.zuplo.io/v1/data`.
+    - When header `api-version: v2` is provided, returns the response from `https://echo.zuplo.io/v2/data`.
+    - When no `api-version` header is provided, defaults to returning the response from `https://echo.zuplo.io/v1/data`.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+The verifier.env contains an API key (often the case for LLM-based verifiers). You will incur costs associated with the API calls.
